@@ -24,7 +24,7 @@ var WebFontConfig = {
 };
 
 var fbConfig = {
-  apiKey: "AIzaSyDhsh567YIHL1EHfBtHaWKQZt38A6TWfn8",
+  apiKey: "++++",
   authDomain: "livetest-32ea9.firebaseio.com",
   databaseURL: "https://livetest-32ea9.firebaseio.com/",
   projectId: "livetest-32ea9",
