@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
+    <title>ONCE UPON A SPRITE 2018</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1, IE=9">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="">
+    <meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0 minimal-ui" />
+
+    <meta property="og:url" content="http://ouas.zero89.it/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Once Upon A Sprite 2018">
+    <meta property="og:description" content="Once Upon A Sprite 2018">
+    <meta property="og:site_name" content="Palazzo Innovazione">
+    <meta property="og:image" content="http://ouas.zero89.it/cover.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="http://ouas.zero89.it/">
+    <meta name="twitter:title" content="Once Upon A Sprite 2018">
+    <meta name="twitter:image:src" content="http://ouas.zero89.it/cover.png">
+
+    <!--<link rel="stylesheet" href="css/master.css" type="text/css" charset="utf-8" />-->
+
+
+</head>
+
+<body>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #prevnextContainer {
+
+            margin: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #eee;
+
+        }
+
+        .prevnext {
+            display: inline-block;
+            width: 39%;
+            margin: 0 5%;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #ffff;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+
+        .prevnext span {
+            padding: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        #prev {
+            background-color: #f00;
+        }
+
+        #next {
+            background-color: #f60;
+        }
+
+        #slidesContainer {
+
+
+            margin: 0 auto;
+            margin-top: 100px;
+
+        }
+
+        .slides {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-left: 5px;
+            margin-bottom: 5px;
+            text-decoration: none;
+        }
+
+        .slides span {
+            display: block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+
+            color: #000;
+            font-size: 80%;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+    </style>
+    <div id="prevnextContainer">
+        <a id="prev" class="prevnext" href="#" onclick="app.prevSlide()"><span>&#xab;&nbsp;PREV</span></a>
+        <a id="next" class="prevnext" href="#" onclick="app.nextSlide()"><span>NEXT&nbsp;&#xbb;</span></a>
+    </div>
+
+    <div id="slidesContainer">
+        <a href="#" class="slides" onclick="app.goTo(0)"><span>slide 1</span></a>
+        <a href="#" class="slides" onclick="app.goTo(1)"><span>slide 2</span></a>
+        <a href="#" class="slides" onclick="app.goTo(2)"><span>slide 3</span></a>
+        <a href="#" class="slides" onclick="app.goTo(3)"><span>slide 4</span></a>
+        <a href="#" class="slides" onclick="app.goTo(4)"><span>slide 5</span></a>
+        <a href="#" class="slides" onclick="app.goTo(5)"><span>slide 6</span></a>
+        <a href="#" class="slides" onclick="app.goTo(6)"><span>slide 7</span></a>
+        <a href="#" class="slides" onclick="app.goTo(7)"><span>slide 8</span></a>
+        <a href="#" class="slides" onclick="app.goTo(8)"><span>slide 9</span></a>
+        <a href="#" class="slides" onclick="app.goTo(9)"><span>slide 10</span></a>
+
+    </div>
+
+</body>
+<script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-database.js"></script>
+<script>
+    var app = {
+
+        fbConfig: {
+            apiKey: "AIzaSyDhsh567YIHL1EHfBtHaWKQZt38A6TWfn8",
+            authDomain: "livetest-32ea9.firebaseio.com",
+            databaseURL: "https://livetest-32ea9.firebaseio.com/",
+            projectId: "livetest-32ea9",
+            storageBucket: "",
+            messagingSenderId: ""
+        },
+
+        fbObj: null,
+        fbObjRoot: null,
+        fbObjCurrentSlide: null,
+        currentSlide: null,
+
+        init: function () {
+
+            this.createFbObj();
+            this.createObjs();
+
+
+        },
+
+        createFbObj: function () {
+
+            this.fbObj = firebase.initializeApp(this.fbConfig);
+            this.fbObjRoot = this.fbObj.database().ref("/");
+            this.fbObjRoot.on("child_changed", function (data) {
+
+                console.log(data.key, data.val())
+                switch (data.key) {
+
+
+                    case "currentSlide":
+
+                        this.currentSlide = data.val();
+
+                        break;
+
+                }
+
+
+
+            });
+
+        },
+
+        createObjs: function () {
+
+            this.fbObjCurrentSlide = this.fbObj.database().ref('currentSlide');
+
+
+        },
+
+        prevSlide: function (index) {
+
+            if (this.currentSlide == 0) return;
+            this.currentSlide--;
+            this.goTo(this.currentSlide)
+
+        },
+
+        nextSlide: function (index) {
+            if (this.currentSlide == 10) return;
+            this.currentSlide++;
+            this.goTo(this.currentSlide)
+
+        },
+
+        goTo: function (index) {
+            this.fbObjCurrentSlide.set(index);
+
+        }
+
+
+
+
+
+    }
+
+
+    app.init();
+</script>
+
+</html>

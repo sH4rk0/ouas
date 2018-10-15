@@ -21,7 +21,21 @@ namespace core {
     create() {
       playSound(gameSound.intro);
 
-      this.texts[0] = this.dateArray();
+      this.texts[0] = [
+        "O",
+        "C",
+        "T",
+        "2",
+        "7",
+        "1",
+        "9",
+        "8",
+        "8",
+        "1",
+        "0",
+        "0",
+        "0"
+      ]; //this.dateArray();
       // console.log(_month + "" + _day + "" + _year + "" + _hour + "" + _minute);
 
       let offset: number = 0;
@@ -242,10 +256,10 @@ namespace core {
       let _hour: string;
       let _minute: string;
 
-      if (newDate.getDay().toString().length == 1) {
-        _day = "0" + newDate.getDay().toString();
+      if (newDate.getDate().toString().length == 1) {
+        _day = "0" + newDate.getDate().toString();
       } else {
-        _day = newDate.getDay().toString();
+        _day = newDate.getDate().toString();
       }
 
       let locale = "en-us";

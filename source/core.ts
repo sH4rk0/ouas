@@ -1,10 +1,20 @@
 /// <reference path="lib/phaser.d.ts"/>
+/// <reference path="lib/firebase.d.ts"/>
 /// <reference path="../source/phaserStates/boot.ts" />
 /// <reference path="../source/phaserStates/preloader.ts" />
 /// <reference path="../source/gameStates/slide1.ts" />
 /// <reference path="../source/gameStates/slide2.ts" />
+/// <reference path="../source/gameStates/slide3.ts" />
+/// <reference path="../source/gameStates/slide4.ts" />
+/// <reference path="../source/gameStates/slide5.ts" />
+/// <reference path="../source/gameStates/slide6.ts" />
+/// <reference path="../source/gameStates/slide7.ts" />
+/// <reference path="../source/gameStates/slide8.ts" />
+/// <reference path="../source/gameStates/slide9.ts" />
+/// <reference path="../source/gameStates/slide10.ts" />
 /// <reference path="../source/gameStates/introLetters.ts" />
-
+/// <reference path="../source/gameStates/photoViewer.ts" />
+/// <reference path="../source/gameStates/star.ts" />
 var _initGame;
 var WebFontConfig = {
   active: function() {},
@@ -13,9 +23,21 @@ var WebFontConfig = {
   }
 };
 
+var fbConfig = {
+  apiKey: "AIzaSyDhsh567YIHL1EHfBtHaWKQZt38A6TWfn8",
+  authDomain: "livetest-32ea9.firebaseio.com",
+  databaseURL: "https://livetest-32ea9.firebaseio.com/",
+  projectId: "livetest-32ea9",
+  storageBucket: "",
+  messagingSenderId: ""
+};
+
 namespace core {
   let _ismobile: boolean;
   let _gameSounds: Array<Phaser.Sound.BaseSound> = [];
+  let fbObj: any = null;
+  let fbSlideObj: any = null;
+  let currentSlide: number = null;
 
   export const _config = {
     type: Phaser.AUTO,
@@ -24,8 +46,48 @@ namespace core {
     parent: "my-game",
     width: 1080,
     height: 720,
-    scene: [Boot, Preloader, slide1, slide2]
+    scene: [
+      Boot,
+      Preloader,
+      slide1,
+      slide2,
+      slide3,
+      slide4,
+      slide5,
+      slide6,
+      slide7,
+      slide8,
+      slide9,
+      slide10
+    ]
   };
+
+  export function createFbObj() {
+    if (this.fbObj == null) {
+      console.log("createFbObj");
+      this.fbObj = firebase.initializeApp(fbConfig);
+    }
+  }
+
+  export function createFbListener() {
+    if (this.fbSlideObj == null) {
+      console.log("createFbListener");
+
+      this.fbSlideObj = this.fbObj.database().ref("/");
+
+      this.fbSlideObj.on("child_changed", data => {
+        console.log(data.key, data.val());
+
+        let _string = <string>data.val();
+
+        if (data.key == "currentSlide") {
+          console.log("goto:", presentationData.slides[data.val()].state);
+          _currentIndex = data.val();
+          goState(presentationData.slides[data.val()].state, _game);
+        }
+      });
+    }
+  }
 
   export let _presentation: Phaser.Game = null;
 
@@ -62,7 +124,8 @@ namespace core {
     }
   }
   export enum gameSound {
-    intro
+    intro,
+    fairlight
   }
   export function pushSound(_sound: Phaser.Sound.BaseSound): void {
     _gameSounds.push(_sound);
@@ -158,16 +221,17 @@ namespace core {
     //_codeContainer.style.width = window.innerWidth + "px";
   }
 
-  export function goState(
-    _lastState: string,
-    _state: string,
-    _game: Phaser.Game
-  ): void {
+  export function goState(_state: string, _game: Phaser.Game): void {
     stopSoundAll();
     setUpSlide(_state);
-    //console.log(_lastState, _state);
-    if (_lastState != _state) _game.scene.stop(_lastState);
-    _game.scene.start(_state);
+
+    _game.scene.scenes.forEach((element: Phaser.Scene) => {
+      if (_game.scene.isActive(element.scene.key))
+        _game.scene.stop(element.scene.key);
+      //_game.scene.sleep()
+    });
+
+    _game.scene.start(_state).bringToTop(_state);
   }
 
   export function setUpSlide(_state: string) {
@@ -231,6 +295,9 @@ namespace core {
           ");' class='mImage'></div><div class='mTitle'>" +
           element.title +
           "</div></div>";
+
+        createFbObj();
+        createFbListener();
 
         mElement.addEventListener("click", () => {
           _slidesContainer.className = "hide";
@@ -319,55 +386,58 @@ namespace core {
       }
     }
 
-    toggleFullScreen() {
+    toggleFullScreen(): void {
       if (
         (document.fullScreenElement && document.fullScreenElement !== null) ||
         (!document.mozFullScreen && !document.webkitIsFullScreen)
       ) {
-        _fullscreenBtn.className = "menuBtn active";
-
-        if (document.documentElement.requestFullScreen) {
-          document.documentElement.requestFullScreen();
-        } else if (document.documentElement.mozRequestFullScreen) {
-          document.documentElement.mozRequestFullScreen();
-        } else if (document.documentElement.webkitRequestFullScreen) {
-          document.documentElement.webkitRequestFullScreen(
-            Element.ALLOW_KEYBOARD_INPUT
-          );
-        }
+        this.setFullscreen();
       } else {
-        _fullscreenBtn.className = "menuBtn";
-        if (document.cancelFullScreen) {
-          document.cancelFullScreen();
-        } else if (document.mozCancelFullScreen) {
-          document.mozCancelFullScreen();
-        } else if (document.webkitCancelFullScreen) {
-          document.webkitCancelFullScreen();
-        }
+        this.removeFullscreen();
+      }
+    }
+
+    setFullscreen(): void {
+      _fullscreenBtn.className = "menuBtn active";
+
+      if (document.documentElement.requestFullScreen) {
+        document.documentElement.requestFullScreen();
+      } else if (document.documentElement.mozRequestFullScreen) {
+        document.documentElement.mozReq;
+        uestFullScreen();
+      } else if (document.documentElement.webkitRequestFullScreen) {
+        document.documentElement.webkitRequestFullScreen(
+          Element.ALLOW_KEYBOARD_INPUT
+        );
+      }
+    }
+
+    removeFullscreen(): void {
+      _fullscreenBtn.className = "menuBtn";
+      if (document.cancelFullScreen) {
+        document.cancelFullScreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitCancelFullScreen) {
+        document.webkitCancelFullScreen();
       }
     }
 
     prevState(): void {
+      if (_currentIndex == 0) return;
       let lastState = _currentIndex;
       _currentIndex--;
       if (_currentIndex < 0) _currentIndex = 0;
-      goState(
-        presentationData.slides[lastState].state,
-        presentationData.slides[_currentIndex].state,
-        _game
-      );
+      goState(presentationData.slides[_currentIndex].state, _game);
     }
 
     nextState(): void {
+      if (_currentIndex == presentationData.slides.length - 1) return;
       let lastState = _currentIndex;
       _currentIndex++;
       if (_currentIndex >= presentationData.slides.length)
         _currentIndex = presentationData.slides.length - 1;
-      goState(
-        presentationData.slides[lastState].state,
-        presentationData.slides[_currentIndex].state,
-        _game
-      );
+      goState(presentationData.slides[_currentIndex].state, _game);
     }
 
     resize() {
@@ -392,13 +462,17 @@ namespace core {
   };
 
   window.addEventListener("blur", () => {
-    if (_game != undefined)
-      _game.scene.pause(presentationData.slides[_currentIndex].state);
+    if (_game != undefined) {
+      console.log(_currentIndex);
+      _game.scene.stop(presentationData.slides[_currentIndex].state);
+    }
   });
 
   window.addEventListener("focus", () => {
-    if (_game != undefined)
-      _game.scene.resume(presentationData.slides[_currentIndex].state);
+    if (_game != undefined) {
+      console.log(_currentIndex);
+      _game.scene.start(presentationData.slides[_currentIndex].state);
+    }
   });
 
   window.onresize = () => _initGame.resize();

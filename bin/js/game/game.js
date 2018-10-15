@@ -26,6 +26,18 @@ var core;
             graphics.fillStyle(0x352879, 1);
             graphics.fillRect(0, 0, 640, 400);
             graphics.generateTexture("bg-commodore-blue", 640, 400);
+            var graphics = this.make.graphics({ x: 0, y: 0, add: false });
+            graphics.fillStyle(0xffffff, 1);
+            graphics.fillRect(0, 0, 800, 450);
+            graphics.generateTexture("foto-fade", 800, 450);
+            var graphics = this.make.graphics({ x: 0, y: 0, add: false });
+            graphics.fillStyle(0xffffff, 1);
+            graphics.fillRect(0, 0, 2, 2);
+            graphics.generateTexture("star", 2, 2);
+            var graphics = this.make.graphics({ x: 0, y: 0, add: false });
+            graphics.fillStyle(0x000000, 1);
+            graphics.fillRect(0, 0, 1080, 70);
+            graphics.generateTexture("scroll-bg", 1080, 70);
             //graphics.clear();
             /*var graphics2 = this.make.graphics({ x: 0, y: 0, add: false });
                   graphics2.fillRect(0, 0, 50, 126);
@@ -41,74 +53,6 @@ var core;
     }(Phaser.Scene));
     core.Boot = Boot;
 })(core || (core = {}));
-/*
-
-module core{
-    export class boot extends Phaser.State{
-
-        preload(){
-         var bmd : Phaser.BitmapData = this.game.add.bitmapData(200,50);
-            
-            bmd.ctx.fillStyle = '#0096ff';
-            bmd.ctx.beginPath();
-            bmd.ctx.rect(0, 0, 200, 50);
-            bmd.ctx.fill();
-            this.game.cache.addBitmapData('loadingBar', bmd);
-            
-            bmd = this.game.add.bitmapData(200,50);
-            bmd.ctx.fillStyle = '#0096ff';
-            bmd.ctx.beginPath();
-            bmd.ctx.rect(0, 0, 200, 50);
-            bmd.ctx.fill();
-            this.game.cache.addBitmapData('startBtn', bmd);
-
-            bmd = this.game.add.bitmapData(1024,20);
-            bmd.ctx.fillStyle = '#00ff00';
-            bmd.ctx.beginPath();
-            bmd.ctx.rect(0, 0, 1024, 20);
-            bmd.ctx.fill();
-            this.game.cache.addBitmapData('collider', bmd);
-
-            bmd = this.game.add.bitmapData(100,100);
-            bmd.ctx.fillStyle = '#ff0000';
-            bmd.ctx.beginPath();
-            bmd.ctx.rect(0, 0, 100, 100);
-            bmd.ctx.fill();
-            this.game.cache.addBitmapData('enemy', bmd);
-
-            bmd = this.game.add.bitmapData(100,100);
-            bmd.ctx.fillStyle = '#0000ff';
-            bmd.ctx.beginPath();
-            bmd.ctx.rect(0, 0, 100, 100);
-            bmd.ctx.fill();
-            this.game.cache.addBitmapData('player', bmd);
-
-            bmd = this.game.add.bitmapData(100,100);
-            bmd.ctx.fillStyle = '#000000';
-            bmd.ctx.beginPath();
-            bmd.ctx.rect(0, 0, 100, 100);
-            bmd.ctx.fill();
-            this.game.cache.addBitmapData('fade', bmd);
-
-
-        }
-
-     create(){
-           
-            
-            this.game.stage.backgroundColor = '#ffffff';
-            this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-            this.game.stage.smoothed=false;
-            this.game.scale.pageAlignHorizontally = true;
-            this.game.scale.pageAlignVertically = true;
-            this.game.state.start('preloader');
-
-
-        }
-    }
-}
-
-*/
 var core;
 (function (core) {
     var Preloader = (function (_super) {
@@ -153,7 +97,7 @@ var core;
                     core.pushSound(_sound);
                 });
                 _this.body.className = "";
-                core.goState(core.presentationData.slides[0].state, core.presentationData.slides[0].state, _this.game);
+                core.goState(core.presentationData.slides[0].state, _this.game);
             });
             //Assets Load
             //--------------------------
@@ -183,111 +127,6 @@ var core;
     }(Phaser.Scene));
     core.Preloader = Preloader;
 })(core || (core = {}));
-/*
-module core {
-    export class preloader extends Phaser.State {
-
-        game: Phaser.Game;
-        startBtn: Phaser.Image;
-        loadingBar: Phaser.Image;
-        loadingPerc: Phaser.Text;
-
-
-
-        preload() {
-
-            try {
-
-                this.game.load.onLoadStart.add(() => { }, this);
-                this.game.load.onFileStart.add(() => { }, this);
-                this.game.load.onFileError.add((filekey, file) => { }, this);
-                this.game.load.onFileComplete.add(this.fileComplete, this);
-
-                this.game.load.onLoadComplete.add(() => {
-
-                    this.loadingBar.visible = false;
-                    this.loadingPerc.visible = false;
-                    this.startBtn.visible = true;
-                    this.startBtn.inputEnabled = true;
-                    this.startBtn.events.onInputDown.add(() => { this.startGame(); }, this);
-
-                    //this.game.input.onTap.addOnce(this.startGame, this);
-
-                }, this);
-
-
-                //start button
-                //--------------------------
-                this.startBtn = this.game.add.image(this.game.world.centerX, this.game.world.centerY, this.game.cache.getBitmapData('startBtn'));
-                this.startBtn.anchor.setTo(0.5);
-
-                var _spriteText = this.game.add.text(0, 0, 'START', { fill: '#ffffff' });
-
-                _spriteText.anchor.set(0.5);
-                this.startBtn.addChild(_spriteText);
-                this.startBtn.visible = false;
-
-                //Loading container
-                //--------------------------
-
-                this.loadingBar = this.game.add.image(this.game.world.centerX, this.game.world.centerY, this.game.cache.getBitmapData('loadingBar'));
-                this.loadingBar.anchor.setTo(0.5);
-                this.loadingPerc = this.game.add.text(0, 0, '0%', { wordWrap: true, wordWrapWidth: this.loadingBar.width, fill: '#ffffff', stroke: '#0096ff', strokeThickness: 5 });
-                this.loadingPerc.anchor.set(0.5);
-                this.loadingBar.addChild(this.loadingPerc);
-                this.game.load.setPreloadSprite(this.loadingBar);
-
-                //Assets Load
-                //--------------------------
-                // IMAGES
-                for (var i = 0; i < gameData.assets.images.length; i++) { this.game.load.image(gameData.assets.images[i].name, gameData.assets.images[i].path); }
-
-                // SPRITESHEETS
-                for (var i = 0; i < gameData.assets.spritesheets.length; i++) {
-                    this.game.load.spritesheet(gameData.assets.spritesheets[i].name, gameData.assets.spritesheets[i].path, gameData.assets.spritesheets[i].width, gameData.assets.spritesheets[i].height, gameData.assets.spritesheets[i].frames);
-                }
-                //bitmap fonts
-                for (var i = 0; i < gameData.assets.bitmapfont.length; i++) {
-                    this.game.load.bitmapFont(gameData.assets.bitmapfont[i].name, gameData.assets.bitmapfont[i].imgpath, gameData.assets.bitmapfont[i].xmlpath);
-                }
-
-                // SOUNDS
-
-                for (var i = 0; i < gameData.assets.sounds.length; i++) {
-                    this.game.load.audio(gameData.assets.sounds[i].name, gameData.assets.sounds[i].paths);
-                }
-
-                //this.game.load.script('webfont', '/js/libs/webfont.js');
-
-            } catch (err) { }
-
-        }
-
-        fileComplete(progress, cacheKey, success, totalLoaded, totalFiles) {
-
-            try {
-                this.loadingPerc.text = progress + "%";
-
-            } catch (err) { }
-
-        }
-
-
-        startGame() {
-
-            console.log("preload start")
-            //startTimer();
-            goState(presentationData.slides[0].state, fadeType.RANDOM, this.game);
-
-
-        }
-
-
-    }
-
-}
-
-*/
 var core;
 (function (core) {
     var slide1 = (function (_super) {
@@ -307,7 +146,21 @@ var core;
         slide1.prototype.create = function () {
             var _this = this;
             core.playSound(core.gameSound.intro);
-            this.texts[0] = this.dateArray();
+            this.texts[0] = [
+                "O",
+                "C",
+                "T",
+                "2",
+                "7",
+                "1",
+                "9",
+                "8",
+                "8",
+                "1",
+                "0",
+                "0",
+                "0"
+            ]; //this.dateArray();
             // console.log(_month + "" + _day + "" + _year + "" + _hour + "" + _minute);
             var offset = 0;
             this.groupPast = this.add.container(540, 0);
@@ -485,11 +338,11 @@ var core;
             var _year;
             var _hour;
             var _minute;
-            if (newDate.getDay().toString().length == 1) {
-                _day = "0" + newDate.getDay().toString();
+            if (newDate.getDate().toString().length == 1) {
+                _day = "0" + newDate.getDate().toString();
             }
             else {
-                _day = newDate.getDay().toString();
+                _day = newDate.getDate().toString();
             }
             var locale = "en-us";
             _month = newDate
@@ -532,14 +385,265 @@ var core;
         };
         slide2.prototype.create = function () {
             console.log("slide2:create");
-            this.template = new core.template(this);
+            var config = {
+                image: "scrollFont",
+                width: 8,
+                height: 8,
+                chars: " ABCDEFGHIJKLMNOPQRSTUVWXYZ!         %&'()*+,-./0123456789:     ",
+                charsPerRow: 32,
+                spacing: { x: 0, y: 0 },
+                offset: { x: 0, y: 0 }
+            };
+            this.cache.bitmapFont.add("scrollFont", Phaser.GameObjects.RetroFont.Parse(this, config));
+            //this.template = new template(this);
+            this.s = { y: -8 };
+            core.playSound(core.gameSound.fairlight);
+            this.add
+                .image(540, 200, "fairlight-logo")
+                .setDepth(100)
+                .setScale(2);
+            var _raster = this.add
+                .image(540, 80, "fairlight-raster")
+                .setDepth(101)
+                .setScale(2);
+            this.tweens.add({
+                targets: _raster,
+                y: {
+                    value: 360,
+                    duration: 2000,
+                    ease: "Quad.easeInOut",
+                    repeat: -1,
+                    yoyo: -1
+                },
+                onStart: function () { },
+                onComplete: function () { },
+                onYoyo: function () {
+                    _raster.setDepth(99);
+                },
+                onRepeat: function () {
+                    _raster.setDepth(101);
+                }
+            });
+            this.add
+                .dynamicBitmapText(0, 275, "scrollFont", "   THE HOME OF THE REAL CRACKERS  ")
+                .setScale(4)
+                .setDepth(100);
+            this.add
+                .dynamicBitmapText(0, 410, "scrollFont", "             PRESENTS")
+                .setScale(4)
+                .setDepth(100);
+            this.add
+                .dynamicBitmapText(0, 680, "scrollFont", "-- SWEDISH QUALITY AT IT'S BEST --")
+                .setScale(4)
+                .setDepth(100);
+            this.raster2 = this.add
+                .tileSprite(0, 480, 1080, 48, "fairlight-raster2")
+                .setOrigin(0);
+            this.add
+                .bitmapText(0, 490, "commodore", "        THE YODAS CREW ++", 32) //"                                    "
+                .setOrigin(0)
+                .setDepth(100)
+                .setTint(0x000000);
+            this.scroller = this.add.dynamicBitmapText(0, 550, "scrollFont", "                                  FAIRLIGHT IS PROUD TO PRESENT A NEW RELEASE: THE YODAS CREW ++       CRACKED BY WOODOO ON 27/10/2018... ENJOY!");
+            this.scroller.setScale(4);
+            /* this.scroller.setDisplayCallback(data => {
+              //data.y += 8 + this.s.y * Math.sin(data.index);
+              data.y += 8 + this.s.y + Math.sin(this.s.y);
+      
+              return data;
+            });*/
+            this.tweens.add({
+                targets: this.scroller,
+                duration: 1000,
+                y: 600,
+                repeat: -1,
+                ease: "Quad.easeIn",
+                yoyo: true
+            });
         };
-        slide2.prototype.update = function () {
-            this.template.update();
+        slide2.prototype.update = function (time, delta) {
+            //this.template.update();
+            this.raster2.tilePositionY += 0.45;
+            this.scroller.scrollX += 0.05 * delta;
+            if (this.scroller.scrollX > 1200) {
+                this.scroller.scrollX = 0;
+            }
         };
         return slide2;
     }(Phaser.Scene));
     core.slide2 = slide2;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var slide3 = (function (_super) {
+        __extends(slide3, _super);
+        function slide3(test) {
+            return _super.call(this, { key: "slide3" }) || this;
+        }
+        slide3.prototype.preload = function () {
+            console.log("slide3:preload");
+        };
+        slide3.prototype.create = function () {
+            console.log("slide3:create");
+            this.template = new core.template(this);
+            this.photo = new core.photoViewer(this, "foto1", "foto1-64", "                                                MR.KILLER, GARIBALDI, AND JUZZO... TYC 1986!");
+        };
+        slide3.prototype.update = function (time, delta) {
+            this.template.update();
+            this.photo.update();
+        };
+        return slide3;
+    }(Phaser.Scene));
+    core.slide3 = slide3;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var slide4 = (function (_super) {
+        __extends(slide4, _super);
+        function slide4(test) {
+            return _super.call(this, { key: "slide4" }) || this;
+        }
+        slide4.prototype.preload = function () {
+            console.log("slide4:preload");
+        };
+        slide4.prototype.create = function () {
+            console.log("slide4:create");
+            this.template = new core.template(this);
+            this.photo = new core.photoViewer(this, "foto2", "foto2-64", "                                                GARIBALDI, BIONIC, MR.KILLER AND JUZZO... TYC 1988!");
+        };
+        slide4.prototype.update = function (time, delta) {
+            this.template.update();
+            this.photo.update();
+        };
+        return slide4;
+    }(Phaser.Scene));
+    core.slide4 = slide4;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var slide5 = (function (_super) {
+        __extends(slide5, _super);
+        function slide5(test) {
+            return _super.call(this, { key: "slide5" }) || this;
+        }
+        slide5.prototype.preload = function () {
+            console.log("slide5:preload");
+        };
+        slide5.prototype.create = function () {
+            console.log("slide5:create");
+            this.template = new core.template(this);
+        };
+        slide5.prototype.update = function (time, delta) {
+            this.template.update();
+        };
+        return slide5;
+    }(Phaser.Scene));
+    core.slide5 = slide5;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var slide6 = (function (_super) {
+        __extends(slide6, _super);
+        function slide6(test) {
+            return _super.call(this, { key: "slide6" }) || this;
+        }
+        slide6.prototype.preload = function () {
+            console.log("slide6:preload");
+        };
+        slide6.prototype.create = function () {
+            console.log("slide6:create");
+            this.template = new core.template(this);
+        };
+        slide6.prototype.update = function (time, delta) {
+            this.template.update();
+        };
+        return slide6;
+    }(Phaser.Scene));
+    core.slide6 = slide6;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var slide7 = (function (_super) {
+        __extends(slide7, _super);
+        function slide7(test) {
+            return _super.call(this, { key: "slide7" }) || this;
+        }
+        slide7.prototype.preload = function () {
+            console.log("slide7:preload");
+        };
+        slide7.prototype.create = function () {
+            console.log("slide7:create");
+            this.template = new core.template(this);
+        };
+        slide7.prototype.update = function (time, delta) {
+            this.template.update();
+        };
+        return slide7;
+    }(Phaser.Scene));
+    core.slide7 = slide7;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var slide8 = (function (_super) {
+        __extends(slide8, _super);
+        function slide8(test) {
+            return _super.call(this, { key: "slide8" }) || this;
+        }
+        slide8.prototype.preload = function () {
+            console.log("slide8:preload");
+        };
+        slide8.prototype.create = function () {
+            console.log("slide8:create");
+            this.template = new core.template(this);
+        };
+        slide8.prototype.update = function (time, delta) {
+            this.template.update();
+        };
+        return slide8;
+    }(Phaser.Scene));
+    core.slide8 = slide8;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var slide9 = (function (_super) {
+        __extends(slide9, _super);
+        function slide9(test) {
+            return _super.call(this, { key: "slide9" }) || this;
+        }
+        slide9.prototype.preload = function () {
+            console.log("slide9:preload");
+        };
+        slide9.prototype.create = function () {
+            console.log("slide9:create");
+            this.template = new core.template(this);
+        };
+        slide9.prototype.update = function (time, delta) {
+            this.template.update();
+        };
+        return slide9;
+    }(Phaser.Scene));
+    core.slide9 = slide9;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var slide10 = (function (_super) {
+        __extends(slide10, _super);
+        function slide10(test) {
+            return _super.call(this, { key: "slide10" }) || this;
+        }
+        slide10.prototype.preload = function () {
+            console.log("slide10:preload");
+        };
+        slide10.prototype.create = function () {
+            console.log("slide10:create");
+            this.template = new core.template(this);
+        };
+        slide10.prototype.update = function (time, delta) {
+            this.template.update();
+        };
+        return slide10;
+    }(Phaser.Scene));
+    core.slide10 = slide10;
 })(core || (core = {}));
 var core;
 (function (core) {
@@ -619,12 +723,182 @@ var core;
     }(Phaser.GameObjects.BitmapText));
     core.introLetter = introLetter;
 })(core || (core = {}));
+var core;
+(function (core) {
+    var photoViewer = (function (_super) {
+        __extends(photoViewer, _super);
+        function photoViewer(scene, image, image2, text) {
+            var _this = _super.call(this, scene, 0, 0) || this;
+            _this.scene = scene;
+            _this.scrollText = text;
+            var config = {
+                image: "scrollFont",
+                width: 8,
+                height: 8,
+                chars: " ABCDEFGHIJKLMNOPQRSTUVWXYZ!         %&'()*+,-./0123456789:     ",
+                charsPerRow: 32,
+                spacing: { x: 0, y: 0 },
+                offset: { x: 0, y: 0 }
+            };
+            _this.scene.cache.bitmapFont.add("scrollFont", Phaser.GameObjects.RetroFont.Parse(_this.scene, config));
+            _this.raster = _this.scene.add
+                .tileSprite(0, 160, 1080, 116, "fairlight-raster2")
+                .setOrigin(0)
+                .setAlpha(0);
+            _this.image = _this.scene.add
+                .image(540, 430, image)
+                .setScale(1)
+                .setAlpha(0);
+            _this.add(_this.image);
+            _this.image2 = _this.scene.add
+                .image(740, 430, image2)
+                .setScale(1)
+                .setAlpha(0);
+            _this.add(_this.image2);
+            _this.fotoFade = _this.scene.add
+                .image(540, 430, "foto-fade")
+                .setScale(1)
+                .setAlpha(0);
+            _this.add(_this.fotoFade);
+            _this.fotoFrame = _this.scene.add
+                .image(740, 430, "foto-frame")
+                .setScale(1)
+                .setAlpha(0)
+                .setDepth(100);
+            _this.add(_this.fotoFrame);
+            _this.scene.tweens.add({
+                targets: _this.raster,
+                alpha: { value: 1, duration: 1000, delay: 700 },
+                y: {
+                    value: 600,
+                    duration: 2000,
+                    ease: "Quad.easeInOut",
+                    repeat: -1,
+                    yoyo: -1
+                }
+            });
+            _this.scene.tweens.add({
+                targets: [_this.image2, _this.fotoFrame],
+                x: 540,
+                alpha: 1,
+                duration: 1000,
+                ease: "Sine.easeInOut",
+                repeat: 0,
+                yoyo: 0,
+                onComplete: function () {
+                    _this.scene.tweens.add({
+                        targets: _this.fotoFade,
+                        alpha: 1,
+                        duration: 250,
+                        ease: "Sine.easeInOut",
+                        repeat: 0,
+                        yoyo: 1,
+                        delay: 1000,
+                        onYoyo: function () {
+                            _this.image2.setAlpha(0);
+                            _this.image.setAlpha(1);
+                        },
+                        onComplete: function () { }
+                    });
+                }
+            });
+            var bg = _this.scene.add
+                .image(0, 580, "scroll-bg")
+                .setAlpha(0)
+                .setDepth(50)
+                .setOrigin(0);
+            _this.scroller = _this.scene.add
+                .dynamicBitmapText(0, 600, "scrollFont", _this.scrollText)
+                .setOrigin(0)
+                .setDepth(51);
+            _this.scroller.setScale(4).setDepth(100);
+            _this.scene.tweens.add({
+                targets: [bg, _this.scroller],
+                alpha: { value: 0.75, duration: 1000, delay: 700 },
+                y: {
+                    value: 650,
+                    duration: 2000,
+                    ease: "Quad.easeIn",
+                    repeat: -1,
+                    yoyo: -1
+                }
+            });
+            _this.scene.tweens.add({
+                targets: _this.scroller,
+                alpha: { value: 1, duration: 1000, delay: 700 },
+                y: {
+                    value: 670,
+                    duration: 2000,
+                    ease: "Quad.easeIn",
+                    repeat: -1,
+                    yoyo: -1
+                }
+            });
+            _this.scene.add.existing(_this);
+            return _this;
+        }
+        photoViewer.prototype.update = function () {
+            this.scroller.scrollX += 1;
+            if (this.scroller.scrollX > this.scroller.width / 4) {
+                this.scroller.scrollX = 0;
+            }
+        };
+        return photoViewer;
+    }(Phaser.GameObjects.Container));
+    core.photoViewer = photoViewer;
+})(core || (core = {}));
+var core;
+(function (core) {
+    var star = (function (_super) {
+        __extends(star, _super);
+        function star(scene) {
+            var _this = _super.call(this, scene, 0, 0, "star") || this;
+            _this.customTint = [
+                0xaaaaaa,
+                0xbbbbbb,
+                0xcccccc,
+                0xdddddd,
+                0xeeeeee,
+                0xffffff
+            ];
+            _this.scene = scene;
+            _this.setScale(1);
+            _this.setX(Phaser.Math.RND.integerInRange(0, 1080));
+            _this.setY(Phaser.Math.RND.integerInRange(0, 80));
+            _this.vel = Phaser.Math.RND.integerInRange(2, 8);
+            _this.setTint(_this.customTint[Phaser.Math.RND.integerInRange(0, 5)]);
+            return _this;
+        }
+        star.prototype.update = function () {
+            this.x -= this.vel;
+            if (this.x < -10) {
+                this.setY(Phaser.Math.RND.integerInRange(0, 80));
+                this.setTint(this.customTint[Phaser.Math.RND.integerInRange(0, 5)]);
+                this.vel = Phaser.Math.RND.integerInRange(2, 8);
+                this.x = 1100;
+            }
+        };
+        return star;
+    }(Phaser.GameObjects.Sprite));
+    core.star = star;
+})(core || (core = {}));
 /// <reference path="lib/phaser.d.ts"/>
+/// <reference path="lib/firebase.d.ts"/>
 /// <reference path="../source/phaserStates/boot.ts" />
 /// <reference path="../source/phaserStates/preloader.ts" />
 /// <reference path="../source/gameStates/slide1.ts" />
 /// <reference path="../source/gameStates/slide2.ts" />
+/// <reference path="../source/gameStates/slide3.ts" />
+/// <reference path="../source/gameStates/slide4.ts" />
+/// <reference path="../source/gameStates/slide5.ts" />
+/// <reference path="../source/gameStates/slide6.ts" />
+/// <reference path="../source/gameStates/slide7.ts" />
+/// <reference path="../source/gameStates/slide8.ts" />
+/// <reference path="../source/gameStates/slide9.ts" />
+/// <reference path="../source/gameStates/slide10.ts" />
 /// <reference path="../source/gameStates/introLetters.ts" />
+/// <reference path="../source/gameStates/photoViewer.ts" />
+/// <reference path="../source/gameStates/star.ts" />
 var _initGame;
 var WebFontConfig = {
     active: function () { },
@@ -632,10 +906,21 @@ var WebFontConfig = {
         families: ["Press Start 2P"]
     }
 };
+var fbConfig = {
+    apiKey: "AIzaSyDhsh567YIHL1EHfBtHaWKQZt38A6TWfn8",
+    authDomain: "livetest-32ea9.firebaseio.com",
+    databaseURL: "https://livetest-32ea9.firebaseio.com/",
+    projectId: "livetest-32ea9",
+    storageBucket: "",
+    messagingSenderId: ""
+};
 var core;
 (function (core) {
     var _ismobile;
     var _gameSounds = [];
+    var fbObj = null;
+    var fbSlideObj = null;
+    var currentSlide = null;
     core._config = {
         type: Phaser.AUTO,
         pixelArt: true,
@@ -643,8 +928,44 @@ var core;
         parent: "my-game",
         width: 1080,
         height: 720,
-        scene: [core.Boot, core.Preloader, core.slide1, core.slide2]
+        scene: [
+            core.Boot,
+            core.Preloader,
+            core.slide1,
+            core.slide2,
+            core.slide3,
+            core.slide4,
+            core.slide5,
+            core.slide6,
+            core.slide7,
+            core.slide8,
+            core.slide9,
+            core.slide10
+        ]
     };
+    function createFbObj() {
+        if (this.fbObj == null) {
+            console.log("createFbObj");
+            this.fbObj = firebase.initializeApp(fbConfig);
+        }
+    }
+    core.createFbObj = createFbObj;
+    function createFbListener() {
+        if (this.fbSlideObj == null) {
+            console.log("createFbListener");
+            this.fbSlideObj = this.fbObj.database().ref("/");
+            this.fbSlideObj.on("child_changed", function (data) {
+                console.log(data.key, data.val());
+                var _string = data.val();
+                if (data.key == "currentSlide") {
+                    console.log("goto:", core.presentationData.slides[data.val()].state);
+                    core._currentIndex = data.val();
+                    goState(core.presentationData.slides[data.val()].state, core._game);
+                }
+            });
+        }
+    }
+    core.createFbListener = createFbListener;
     core._presentation = null;
     core._textClass = ["normal", "medium", "big"];
     core._fontSize = 0;
@@ -663,6 +984,7 @@ var core;
     var gameSound;
     (function (gameSound) {
         gameSound[gameSound["intro"] = 0] = "intro";
+        gameSound[gameSound["fairlight"] = 1] = "fairlight";
     })(gameSound = core.gameSound || (core.gameSound = {}));
     function pushSound(_sound) {
         _gameSounds.push(_sound);
@@ -751,13 +1073,15 @@ var core;
         //_codeContainer.style.width = window.innerWidth + "px";
     }
     core.setResize = setResize;
-    function goState(_lastState, _state, _game) {
+    function goState(_state, _game) {
         stopSoundAll();
         setUpSlide(_state);
-        //console.log(_lastState, _state);
-        if (_lastState != _state)
-            _game.scene.stop(_lastState);
-        _game.scene.start(_state);
+        _game.scene.scenes.forEach(function (element) {
+            if (_game.scene.isActive(element.scene.key))
+                _game.scene.stop(element.scene.key);
+            //_game.scene.sleep()
+        });
+        _game.scene.start(_state).bringToTop(_state);
     }
     core.goState = goState;
     function setUpSlide(_state) {
@@ -816,6 +1140,8 @@ var core;
                         ");' class='mImage'></div><div class='mTitle'>" +
                         element.title +
                         "</div></div>";
+                createFbObj();
+                createFbListener();
                 mElement.addEventListener("click", function () {
                     core._slidesContainer.className = "hide";
                     setCurrentIndex(element.state);
@@ -894,43 +1220,54 @@ var core;
         initPresentation.prototype.toggleFullScreen = function () {
             if ((document.fullScreenElement && document.fullScreenElement !== null) ||
                 (!document.mozFullScreen && !document.webkitIsFullScreen)) {
-                core._fullscreenBtn.className = "menuBtn active";
-                if (document.documentElement.requestFullScreen) {
-                    document.documentElement.requestFullScreen();
-                }
-                else if (document.documentElement.mozRequestFullScreen) {
-                    document.documentElement.mozRequestFullScreen();
-                }
-                else if (document.documentElement.webkitRequestFullScreen) {
-                    document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-                }
+                this.setFullscreen();
             }
             else {
-                core._fullscreenBtn.className = "menuBtn";
-                if (document.cancelFullScreen) {
-                    document.cancelFullScreen();
-                }
-                else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                }
-                else if (document.webkitCancelFullScreen) {
-                    document.webkitCancelFullScreen();
-                }
+                this.removeFullscreen();
+            }
+        };
+        initPresentation.prototype.setFullscreen = function () {
+            core._fullscreenBtn.className = "menuBtn active";
+            if (document.documentElement.requestFullScreen) {
+                document.documentElement.requestFullScreen();
+            }
+            else if (document.documentElement.mozRequestFullScreen) {
+                document.documentElement.mozReq;
+                uestFullScreen();
+            }
+            else if (document.documentElement.webkitRequestFullScreen) {
+                document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+            }
+        };
+        initPresentation.prototype.removeFullscreen = function () {
+            core._fullscreenBtn.className = "menuBtn";
+            if (document.cancelFullScreen) {
+                document.cancelFullScreen();
+            }
+            else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            }
+            else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
             }
         };
         initPresentation.prototype.prevState = function () {
+            if (core._currentIndex == 0)
+                return;
             var lastState = core._currentIndex;
             core._currentIndex--;
             if (core._currentIndex < 0)
                 core._currentIndex = 0;
-            goState(core.presentationData.slides[lastState].state, core.presentationData.slides[core._currentIndex].state, core._game);
+            goState(core.presentationData.slides[core._currentIndex].state, core._game);
         };
         initPresentation.prototype.nextState = function () {
+            if (core._currentIndex == core.presentationData.slides.length - 1)
+                return;
             var lastState = core._currentIndex;
             core._currentIndex++;
             if (core._currentIndex >= core.presentationData.slides.length)
                 core._currentIndex = core.presentationData.slides.length - 1;
-            goState(core.presentationData.slides[lastState].state, core.presentationData.slides[core._currentIndex].state, core._game);
+            goState(core.presentationData.slides[core._currentIndex].state, core._game);
         };
         initPresentation.prototype.resize = function () {
             var canvas = document.querySelector("canvas");
@@ -955,12 +1292,16 @@ var core;
         _initGame.resize();
     };
     window.addEventListener("blur", function () {
-        if (core._game != undefined)
-            core._game.scene.pause(core.presentationData.slides[core._currentIndex].state);
+        if (core._game != undefined) {
+            console.log(core._currentIndex);
+            core._game.scene.stop(core.presentationData.slides[core._currentIndex].state);
+        }
     });
     window.addEventListener("focus", function () {
-        if (core._game != undefined)
-            core._game.scene.resume(core.presentationData.slides[core._currentIndex].state);
+        if (core._game != undefined) {
+            console.log(core._currentIndex);
+            core._game.scene.start(core.presentationData.slides[core._currentIndex].state);
+        }
     });
     window.onresize = function () { return _initGame.resize(); };
 })(core || (core = {}));
@@ -975,9 +1316,57 @@ var core;
                 code: ""
             },
             {
-                title: "TYC",
+                title: "Fairlight",
                 state: "slide2",
-                preview: "assets/images/slide2/bg.png",
+                preview: "assets/images/slide2/preview.png",
+                code: ""
+            },
+            {
+                title: "THE YODAS CREW",
+                state: "slide3",
+                preview: "assets/images/slide3/preview.png",
+                code: ""
+            },
+            {
+                title: "THE YODAS CREW",
+                state: "slide4",
+                preview: "assets/images/slide4/preview.png",
+                code: ""
+            },
+            {
+                title: "THE YODAS CREW",
+                state: "slide5",
+                preview: "assets/images/slide5/preview.png",
+                code: ""
+            },
+            {
+                title: "THE YODAS CREW",
+                state: "slide6",
+                preview: "assets/images/slide6/preview.png",
+                code: ""
+            },
+            {
+                title: "THE YODAS CREW",
+                state: "slide7",
+                preview: "assets/images/slide7/preview.png",
+                code: ""
+            },
+            {
+                title: "THE YODAS CREW",
+                state: "slide8",
+                preview: "assets/images/slide8/preview.png",
+                code: ""
+            },
+            {
+                title: "THE YODAS CREW",
+                state: "slide9",
+                preview: "assets/images/slide9/preview.png",
+                code: ""
+            },
+            {
+                title: "THE YODAS CREW",
+                state: "slide10",
+                preview: "assets/images/slide10/preview.png",
                 code: ""
             }
         ]
@@ -1005,13 +1394,31 @@ var core;
                 { name: "introNow", path: "assets/images/slide1/now.png" },
                 { name: "ouas", path: "assets/images/slide1/ouasMask.png" },
                 { name: "raster", path: "assets/images/slide1/raster.png" },
-                { name: "tyc", path: "assets/images/slide2/tyc.png" },
-                { name: "subtitle", path: "assets/images/slide2/subtitle.png" },
-                { name: "bg", path: "assets/images/slide2/_bg.png" },
-                { name: "mountains", path: "assets/images/slide2/_mountains.png" },
-                { name: "land", path: "assets/images/slide2/_land.png" },
-                { name: "trees", path: "assets/images/slide2/_trees.png" },
-                { name: "water", path: "assets/images/slide2/_water.png" }
+                { name: "tyc", path: "assets/images/template/tyc.png" },
+                { name: "subtitle", path: "assets/images/template/subtitle.png" },
+                { name: "bg", path: "assets/images/template/_bg.png" },
+                { name: "mountains", path: "assets/images/template/_mountains.png" },
+                { name: "land", path: "assets/images/template/_land.png" },
+                { name: "trees", path: "assets/images/template/_trees.png" },
+                { name: "water", path: "assets/images/template/_water.png" },
+                {
+                    name: "fairlight-logo",
+                    path: "assets/images/slide2/fairlight-logo.png"
+                },
+                {
+                    name: "fairlight-raster",
+                    path: "assets/images/slide2/fairlight-raster.png"
+                },
+                {
+                    name: "fairlight-raster2",
+                    path: "assets/images/slide2/fairlight-raster2.png"
+                },
+                { name: "scrollFont", path: "assets/fonts/test.png" },
+                { name: "foto-frame", path: "assets/images/foto/foto-frame.png" },
+                { name: "foto1", path: "assets/images/foto/foto1.jpg" },
+                { name: "foto1-64", path: "assets/images/foto/foto1-64.png" },
+                { name: "foto2", path: "assets/images/foto/foto2.jpg" },
+                { name: "foto2-64", path: "assets/images/foto/foto2-64.png" }
             ],
             sounds: [
                 {
@@ -1019,6 +1426,12 @@ var core;
                     paths: ["assets/sounds/intro1.ogg", "assets/sounds/intro1.m4a"],
                     volume: 3,
                     loop: false
+                },
+                {
+                    name: "fairlight",
+                    paths: ["assets/sounds/fairlight.ogg", "assets/sounds/fairlight.m4a"],
+                    volume: 3,
+                    loop: true
                 }
             ],
             bitmapfont: [
@@ -1026,6 +1439,12 @@ var core;
                     name: "digital",
                     imgpath: "assets/fonts/digital_0.png",
                     xmlpath: "assets/fonts/digital.xml",
+                    jsonpath: ""
+                },
+                {
+                    name: "commodore",
+                    imgpath: "assets/fonts/64_0.png",
+                    xmlpath: "assets/fonts/64.xml",
                     jsonpath: ""
                 }
             ]
@@ -1040,35 +1459,56 @@ var core;
         __extends(template, _super);
         function template(scene) {
             var _this = _super.call(this, scene, 0, 0) || this;
+            _this.stars = [];
             _this.scene = scene;
+            _this.stars = [];
             _this.scene.add.image(0, 0, "bg-commodore").setOrigin(0, 0);
-            _this.scene.add.image(540, 400, "bg-commodore-blue").setOrigin(0.5);
+            _this.scene.add.image(540, 430, "bg-commodore-blue").setOrigin(0.5);
             _this.bg = _this.scene.add
                 .tileSprite(540, 0, 1080, 150, "bg")
                 .setOrigin(0.5, 0)
+                .setAlpha(0)
                 .setTilePosition(500);
             _this.mountains = _this.scene.add
                 .tileSprite(540, 50, 1080, 80, "mountains")
+                .setAlpha(0)
                 .setOrigin(0.5, 0);
-            _this.mountains.setTilePosition(200);
+            _this.mountains.setTilePosition(200).setDepth(9);
             _this.tyc = _this.scene.add
                 .image(400, 40, "tyc")
                 .setScale(1)
-                .setAlpha(1);
+                .setAlpha(0)
+                .setDepth(10);
             _this.trees = _this.scene.add
                 .tileSprite(540, 100, 1080, 30, "trees")
-                .setOrigin(0.5, 0);
+                .setOrigin(0.5, 0)
+                .setAlpha(0)
+                .setDepth(11);
             _this.trees.setTilePosition(200);
             _this.water = _this.scene.add
                 .tileSprite(540, 125, 1080, 35, "water")
-                .setOrigin(0.5, 0);
+                .setOrigin(0.5, 0)
+                .setAlpha(0)
+                .setDepth(12);
             _this.water.setTilePosition(200);
             _this.land = _this.scene.add
                 .tileSprite(540, 125, 1080, 35, "land")
-                .setOrigin(0.5, 0);
+                .setOrigin(0.5, 0)
+                .setAlpha(0)
+                .setDepth(13);
             _this.land.setTilePosition(200);
             _this.scene.tweens.add({
+                targets: [_this.bg, _this.mountains, _this.trees, _this.land, _this.water],
+                alpha: 1,
+                duration: 400
+            });
+            _this.scene.tweens.add({
                 targets: _this.tyc,
+                alpha: {
+                    value: 1,
+                    duration: 500,
+                    repeat: 0
+                },
                 x: {
                     value: 700,
                     duration: 3200,
@@ -1084,7 +1524,14 @@ var core;
                     yoyo: -1
                 }
             });
-            _this.subtitle = _this.scene.add.image(540, 300, "subtitle").setScale(1);
+            var _star;
+            [0, 1, 2, 3, 4].forEach(function () {
+                _star = new core.star(_this.scene);
+                _star.setDepth(1);
+                _this.stars.push(_star);
+                _this.add(_star);
+            });
+            //this.subtitle = this.scene.add.image(540, 300, "subtitle").setScale(1);
             _this.scene.add.existing(_this);
             return _this;
         }
@@ -1093,6 +1540,9 @@ var core;
             this.trees.tilePositionX += 0.35;
             this.land.tilePositionX += 0.35;
             this.water.tilePositionX += 0.45;
+            this.stars.forEach(function (element) {
+                element.update();
+            });
         };
         return template;
     }(Phaser.GameObjects.Container));
